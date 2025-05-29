@@ -1,0 +1,452 @@
+<script type="text/javascript">
+  var gk_isXlsx = false;
+  var gk_xlsxFileLookup = {};
+  var gk_fileData = {};
+  function filledCell(cell) {
+    return cell !== '' && cell != null;
+  }
+  function loadFileData(filename) {
+    if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+      try {
+        var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+        var firstSheetName = workbook.SheetNames[0];
+        var worksheet = workbook.Sheets[firstSheetName];
+
+        // Convert sheet to JSON to filter blank rows
+        var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+        // Filter out blank rows (rows where all cells are empty, null, or undefined)
+        var filteredData = jsonData.filter(row => row.some(filledCell));
+
+        // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+        var headerRowIndex = filteredData.findIndex((row, index) =>
+          row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+        );
+        // Fallback
+        if (headerRowIndex === -1 || headerRowIndex > 25) {
+          headerRowIndex = 0;
+        }
+
+        // Convert filtered JSON back to CSV
+        var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+        csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+        return csv;
+      } catch (e) {
+        console.error(e);
+        return "";
+      }
+    }
+    return gk_fileData[filename] || "";
+  }
+</script><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>أولو | رؤية جديدة لعالمك الرقمي</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    body {
+      background: #0a1f1f;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* النافبار */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(10, 31, 31, 0.85);
+      backdrop-filter: blur(10px);
+      padding: 15px 0;
+      z-index: 1000;
+    }
+
+    header nav ul {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+    }
+
+    header nav ul li {
+      margin: 0 20px;
+    }
+
+    header nav ul li a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 700;
+      transition: color 0.3s ease;
+    }
+
+    header nav ul li a:hover {
+      color: #00b7b7;
+    }
+
+    /* القسم الرئيسي */
+    #hero {
+      height: 100vh;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    #particles-js {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #0a1f1f 0%, #004242 100%);
+    }
+
+    #hero .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    #hero h1 {
+      font-size: 72px;
+      color: #00b7b7;
+      text-shadow: 0 0 15px rgba(0, 183, 183, 0.5);
+      margin-bottom: 40px; /* تباعد أكبر بين العنوان والنص الفرعي */
+    }
+
+    #hero .typed-text {
+      font-size: 28px;
+      font-weight: 400;
+      color: #fff;
+      line-height: 1.8; /* تباعد بين الأسطر داخل النص */
+      min-height: 50px; /* لضمان مساحة كافية للنص الديناميكي */
+      margin-bottom: 50px; /* تباعد أكبر بين النص والزر */
+    }
+
+    #hero .btn {
+      padding: 15px 40px;
+      background: #00b7b7;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      border-radius: 50px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      font-size: 20px;
+    }
+
+    #hero .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(0, 183, 183, 0.5);
+    }
+
+    /* الأقسام العامة */
+    section {
+      padding: 100px 10%;
+      position: relative;
+    }
+
+    section h2 {
+      font-size: 40px;
+      margin-bottom: 30px;
+      color: #00b7b7;
+      text-align: center;
+    }
+
+    /* قسم عن أولو */
+    #about {
+      background: #fff;
+      color: #0a1f1f;
+    }
+
+    #about p {
+      font-size: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    /* تأثير البارالاكس */
+    .parallax-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://www.transparenttextures.com/patterns/circuit-pattern.png') repeat;
+      opacity: 0.1;
+      z-index: 0;
+      transform: translateY(0);
+    }
+
+    /* قسم الخدمات */
+    #services {
+      background: #0a1f1f;
+    }
+
+    #services .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .service-card {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 40px;
+      border-radius: 15px;
+      border: 1px solid rgba(0, 183, 183, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, rgba(0, 183, 183, 0.3) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .service-card:hover::before {
+      opacity: 1;
+    }
+
+    .service-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 30px rgba(0, 183, 183, 0.3);
+    }
+
+    .service-card h3 {
+      font-size: 26px;
+      margin-bottom: 15px;
+      color: #00b7b7;
+    }
+
+    .service-card p {
+      font-size: 18px;
+      color: #ddd;
+    }
+
+    /* قسم لماذا أولو */
+    #why-olo {
+      background: #fff;
+      color: #0a1f1f;
+    }
+
+    #why-olo ul {
+      list-style: none;
+      font-size: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    #why-olo ul li {
+      margin: 15px 0;
+    }
+
+    /* قسم الرؤية */
+    #vision {
+      background: #0a1f1f;
+    }
+
+    #vision p {
+      font-size: 20px;
+      max-width: 900px;
+      margin: 20px auto;
+    }
+
+    /* قسم التواصل */
+    #contact {
+      background: #fff;
+      color: #0a1f1f;
+      padding-bottom: 50px;
+    }
+
+    #contact a {
+      color: #00b7b7;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    #contact a:hover {
+      text-decoration: underline;
+    }
+
+    /* تأثيرات عند التمرير */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+<!-- النافبار -->
+<header>
+  <nav>
+    <ul>
+      <li><a href="#hero">الرئيسية</a></li>
+      <li><a href="#about">عن أولو</a></li>
+      <li><a href="#services">خدماتنا</a></li>
+      <li><a href="#why-olo">لماذا أولو؟</a></li>
+      <li><a href="#vision">رؤيتنا</a></li>
+      <li><a href="#contact">تواصلوا معنا</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- القسم الرئيسي -->
+<section id="hero">
+  <div id="particles-js"></div>
+  <div class="hero-content">
+    <h1>أولو | Olo</h1>
+    <div class="typed-text"></div>
+    <a href="#about" class="btn">اكتشف المزيد</a>
+  </div>
+</section>
+
+<!-- قسم عن أولو -->
+<section id="about" class="fade-in">
+  <div class="parallax-bg"></div>
+  <h2>نبذة عن أولو</h2>
+  <p>أولو هي شركة كويتية رائدة في صيانة البرمجيات وتصميم مواقع الإنترنت. نهدف إلى تقديم حلول تقنية مبتكرة تجمع بين الإبداع والكفاءة، لنضيف بُعدًا جديدًا لتجربة عملائنا الرقمية.</p>
+</section>
+
+<!-- قسم الخدمات -->
+<section id="services" class="fade-in">
+  <h2>خدماتنا</h2>
+  <div class="services-grid">
+    <div class="service-card">
+      <h3>صيانة البرمجيات</h3>
+      <p>نضمن استمرارية أنظمتك وتطبيقاتك بأعلى أداء من خلال صيانة شاملة وتحديثات مستمرة.</p>
+    </div>
+    <div class="service-card">
+      <h3>تصميم مواقع الويب</h3>
+      <p>نصمم مواقع متجاوبة وجذابة تركز على تجربة المستخدم وتحسين الظهور على محركات البحث.</p>
+    </div>
+    <div class="service-card">
+      <h3>تطوير تطبيقات مخصصة</h3>
+      <p>حلول برمجية مصممة خصيصًا لتلبية احتياجات عملك الفريدة.</p>
+    </div>
+    <div class="service-card">
+      <h3>استشارات تقنية</h3>
+      <p>نقدم استشارات احترافية لاختيار أفضل التقنيات التي تدعم أهدافك.</p>
+    </div>
+  </div>
+</section>
+
+<!-- قسم لماذا أولو -->
+<section id="why-olo" class="fade-in">
+  <div class="parallax-bg"></div>
+  <h2>لماذا أولو؟</h2>
+  <p>اسم “أولو” (Olo) مستوحى من اكتشاف علمي حديث للون جديد يحمل الاسم نفسه، يُمثل الابتكار والتفرد في عالم الرؤية. اخترنا هذا الاسم لأنه يعكس جوهر عملنا: تقديم حلول تقنية غير تقليدية ومبتكرة تضيف بُعدًا جديدًا لتجربة العملاء، تمامًا كما يضيف لون “أولو” تجربة بصرية فريدة لم تُرَ من قبل. كما أن الاسم مشتق من النظام الثنائي (010)، مما يرمز إلى الدقة والتكنولوجيا الرقمية التي نعتمد عليها في عملنا.</p>
+  <p>في سياق الشركة، “أولو” ليس مجرد اسم، بل هو رمز للإبداع والتميز. يُمثل اللون “أولو” المكتشف حديثًا (2025) تجربة بصرية مشبعة وفريدة لا يمكن رؤيتها بالطرق التقليدية، وهو ما يعكس فلسفتنا في تقديم خدمات برمجية وتصميمية تتجاوز التوقعات وتخلق تأثيرًا مميزًا. نطمح أن نكون مثل هذا اللون: حلًا جديدًا ومبتكرًا في عالم التكنولوجيا.. نحن نطمح أن نكون:</p>
+  <ul>
+    <li>✨ فريدين في حلولنا</li>
+    <li>🔍 مبتكرين وغير تقليديين</li>
+    <li>🌟 مقدمين لتجربة رقمية استثنائية</li>
+  </ul>
+</section>
+
+<!-- قسم الرؤية -->
+<section id="vision" class="fade-in">
+  <h2>رؤيتنا ومهمتنا</h2>
+  <p><strong>رؤيتنا:</strong> أن نكون روّاد التميز في العالم العربي في البرمجة والتصميم، بتقديم خدمات تفوق التوقعات.</p>
+  <p><strong>مهمتنا:</strong> تقديم حلول تقنية مبنية على الإبداع والدقة، لنكون جسراً نحو عالم رقمي أكثر تطوراً.</p>
+</section>
+
+<!-- قسم التواصل -->
+<section id="contact" class="fade-in">
+  <div class="parallax-bg"></div>
+  <h2>تواصلوا معنا</h2>
+  <p>للتواصل مع فريق أولو، يرجى مراسلتنا على: <a href="mailto:info@olo.com">info@olo.com</a></p>
+  <p>أو الاتصال بنا على: <a href="tel:+96512345678">+965 1234 5678</a></p>
+</section>
+
+<script>
+  // تهيئة تأثير الجسيمات
+  particlesJS('particles-js', {
+    "particles": {
+      "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+      "color": { "value": "#00b7b7" },
+      "shape": { "type": "circle" },
+      "opacity": { "value": 0.5, "random": true },
+      "size": { "value": 3, "random": true },
+      "line_linked": { "enable": true, "distance": 150, "color": "#00b7b7", "opacity": 0.4, "width": 1 },
+      "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false }
+    },
+    "interactivity": {
+      "detect_on": "canvas",
+      "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" } },
+      "modes": { "repulse": { "distance": 100 }, "push": { "particles_nb": 4 } }
+    },
+    "retina_detect": true
+  });
+
+  // تأثير الكتابة الديناميكي
+  const typed = new Typed('.typed-text', {
+    strings: ['حلول تقنية من عين مبتكرة', 'نضيف لونًا جديدًا لعالمك الرقمي', 'تجربة رقمية استثنائية'],
+    typeSpeed: 50,
+    backSpeed: 30,
+    backDelay: 2000,
+    loop: true
+  });
+
+  // التمرير السلس
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      document.querySelector(this.getAttribute('href')).scrollIntoView({
+        behavior: 'smooth'
+      });
+    });
+  });
+
+  // تأثيرات البارالاكس
+  window.addEventListener('scroll', function () {
+    const parallax = document.querySelectorAll('.parallax-bg');
+    parallax.forEach(bg => {
+      const speed = 0.5;
+      const yPos = -(window.pageYOffset * speed);
+      bg.style.transform = `translateY(${yPos}px)`;
+    });
+  });
+
+  // تأثيرات عند التمرير
+  const fadeIns = document.querySelectorAll('.fade-in');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.2 });
+
+  fadeIns.forEach(element => observer.observe(element));
+</script>
+</body>
+</html>
