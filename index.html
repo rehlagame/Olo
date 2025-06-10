@@ -122,17 +122,17 @@
         #hero h1 {
             font-size: 72px;
             color: #00b7b7;
-            text-shadow:  surfaces: 0 0 15px rgba(0, 183, 183, 0.5);
-            margin-bottom: 40px; /* تباعد أكبر بين العنوان والنص الفرعي */
+            text-shadow: 0 0 15px rgba(0, 183, 183, 0.5);
+            margin-bottom: 40px;
         }
 
         #hero .typed-text {
             font-size: 28px;
             font-weight: 400;
             color: #fff;
-            line-height: 1.8; /* تباعد بين الأسطر داخل النص */
-            min-height: 50px; /* لضمان مساحة كافية للنص الديناميكي */
-            margin-bottom: 50px; /* تباعد أكبر بين النص والزر */
+            line-height: 1.8;
+            min-height: 50px;
+            margin-bottom: 50px;
         }
 
         #hero .btn {
@@ -274,21 +274,137 @@
             margin: 20px auto;
         }
 
-        /* قسم التواصل */
+        /* قسم التواصل الجديد */
         #contact {
-            background: #fff;
-            color: #0a1f1f;
-            padding-bottom: 50px;
+            background: linear-gradient(135deg, #0a1f1f 0%, #004242 100%);
+            color: #ffffff;
+            padding: 80px 10%;
+            position: relative;
+            overflow: hidden;
         }
 
-        #contact a {
+        #contact::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/circuit-pattern.png') repeat;
+            opacity: 0.15;
+            z-index: 0;
+            animation: pulse 8s infinite ease-in-out;
+        }
+
+        #contact .container {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        #contact h2 {
+            font-size: 48px;
             color: #00b7b7;
-            text-decoration: none;
-            font-weight: 700;
+            text-shadow: 0 0 10px rgba(0, 183, 183, 0.5);
+            margin-bottom: 40px;
+            animation: fadeInDown 1s ease-out;
         }
 
-        #contact a:hover {
+        #contact .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        #contact .contact-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 183, 183, 0.3);
+            width: 300px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #contact .contact-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 183, 183, 0.3);
+        }
+
+        #contact .contact-card h3 {
+            font-size: 24px;
+            color: #00b7b7;
+            margin-bottom: 15px;
+        }
+
+        #contact .contact-card p {
+            font-size: 18px;
+            color: #ddd;
+            margin-bottom: 15px;
+        }
+
+        #contact .contact-card a {
+            color: #00b7b7;
+            font-weight: 700;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        #contact .contact-card a:hover {
+            color: #ffffff;
             text-decoration: underline;
+        }
+
+        #contact .contact-form {
+            background: rgba(0, 183, 183, 0.1);
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        #contact .contact-form h3 {
+            font-size: 28px;
+            color: #00b7b7;
+            margin-bottom: 20px;
+        }
+
+        #contact .contact-form input,
+        #contact .contact-form textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 16px;
+        }
+
+        #contact .contact-form textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        #contact .contact-form button {
+            padding: 12px 30px;
+            background: #00b7b7;
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 18px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #contact .contact-form button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 183, 183, 0.5);
         }
 
         /* الفوتر */
@@ -314,7 +430,7 @@
             text-decoration: underline;
         }
 
-        /* تأثيرات عند التمرير */
+        /* تأثيرات التمرير */
         .fade-in {
             opacity: 0;
             transform: translateY(50px);
@@ -325,6 +441,22 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        @keyframes pulse {
+            0% { opacity: 0.15; }
+            50% { opacity: 0.25; }
+            100% { opacity: 0.15; }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
@@ -332,11 +464,9 @@
     <header>
         <nav>
             <ul>
-                
                 <li><a href="#about">عن أولو</a></li>
                 <li><a href="#services">خدماتنا</a></li>
                 <li><a href="#why-olo">لماذا أولو؟</a></li>
-               
             </ul>
         </nav>
     </header>
@@ -385,8 +515,7 @@
     <section id="why-olo" class="fade-in">
         <div class="parallax-bg"></div>
         <h2>لماذا أولو؟</h2>
-       <p>اسم "أولو" (Olo) مستوحى من اكتشاف علمي حديث عام 2025 للون الفريد الذي يحمل الاسم ذاته، وهو لون أخضر مزرق فائق التشبع يجسد الابتكار والتفرد في عالم الرؤية. اخترنا هذا الاسم ليعبر عن جوهر عملنا في تقديم حلول تقنية وبرمجية غير تقليدية تضيف بُعدًا جديدًا لتجربة العملاء، تمامًا كما يقدم لون "أولو" تجربة بصرية مشبعة ومميزة لا تُرى بالطرق التقليدية. كما يرمز الاسم إلى النظام الثنائي (010)، مما يعكس الدقة والتكنولوجيا الرقمية التي نعتمدها. في "أولو"، نطمح أن نكون رمزًا للإبداع والتميز، مقدمين خدمات تصميمية وتقنية تتجاوز التوقعات وتخلق تأثيرًا مبتكرًا في عالم التكنولوجيا.</p>
-
+        <p>اسم "أولو" (Olo) مستوحى من اكتشاف علمي حديث عام 2025 للون الفريد الذي يحمل الاسم ذاته، وهو لون أخضر مزرق فائق التشبع يجسد الابتكار والتفرد في عالم الرؤية. اخترنا هذا الاسم ليعبر عن جوهر عملنا في تقديم حلول تقنية وبرمجية غير تقليدية تضيف بُعدًا جديدًا لتجربة العملاء، تمامًا كما يقدم لون "أولو" تجربة بصرية مشبعة ومميزة لا تُرى بالطرق التقليدية. كما يرمز الاسم إلى النظام الثنائي (010)، مما يعكس الدقة والتكنولوجيا الرقمية التي نعتمدها. في "أولو"، نطمح أن نكون رمزًا للإبداع والتميز، مقدمين خدمات تصميمية وتقنية تتجاوز التوقعات وتخلق تأثيرًا مبتكرًا في عالم التكنولوجيا.</p>
         <ul>
             <li>✨ فريدين في حلولنا</li>
             <li>🔍 مبتكرين وغير تقليديين</li>
@@ -401,17 +530,35 @@
         <p><strong>مهمتنا:</strong> تقديم حلول تقنية مبنية على الإبداع والدقة، لنكون جسراً نحو عالم رقمي أكثر تطوراً.</p>
     </section>
 
-    <!-- قسم التواصل -->
+    <!-- قسم التواصل الجديد -->
     <section id="contact" class="fade-in">
         <div class="parallax-bg"></div>
-        <h2>تواصلوا معنا</h2>
-        <p>للتواصل مع فريق أولو، يرجى مراسلتنا على: <a href="olocompany0@gmail.com">olocompany0@gmail.com</a></p>
-        
+        <div class="container">
+            <h2>تواصل مع الابتكار</h2>
+            <p class="intro-text">استعد لتجربة تقنية فائقة! فريق أولو جاهز لدعمك بأحدث الحلول البرمجية والتصميمية. تواصلوا معنا لنصنع المستقبل الرقمي معًا.</p>
+            <div class="contact-info">
+                <div class="contact-card">
+                    <h3>البريد الإلكتروني</h3>
+                    <p>تواصلوا معنا مباشرة:</p>
+                    <a href="mailto:olocompany0@gmail.com">olocompany0@gmail.com</a>
+                </div>
+              
+            </div>
+            <div class="contact-form">
+                <h3>أرسل رسالتك</h3>
+                <form>
+                    <input type="text" placeholder="اسمك" required>
+                    <input type="email" placeholder="بريدك الإلكتروني" required>
+                    <textarea placeholder="رسالتك" required></textarea>
+                    <button type="submit">إرسال</button>
+                </form>
+            </div>
+        </div>
     </section>
 
     <!-- الفوتر -->
     <footer>
-        <p>&copy; 2025 Olo Tech Solutions. All Rights Reserved.</p>
+        <p>© 2025 Olo Tech Solutions. All Rights Reserved.</p>
     </footer>
 
     <script>
