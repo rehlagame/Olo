@@ -505,6 +505,15 @@
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+            /* تخصيص حجم ومكان أيقونة الإنستغرام */
+#contact .contact-card .contact-icon {
+  display: block;         /* عشان يتمركز أفقياً */
+  margin: 0 auto 15px;    /* مسافة تحت الأيقونة */
+  width: 48px;            /* عرض مناسب */
+  height: 48px;           /* ارتفاع مناسب */
+  object-fit: contain;    /* يحافظ على نسب الصورة */
+}
+
     </style>
 </head>
 <body>
@@ -592,12 +601,13 @@
         <div class="container">
             <h2>تواصل مع الابتكار</h2>
             <div class="contact-info">
-                <div class="contact-card">
-                    <span class="icon">📸</span>
-                    <h3>إنستغرام</h3>
-                    <p>تابعنا وتواصل معنا:</p>
-                    <a href="https://www.instagram.com/olosoluations" target="_blank">@olosoluations</a>
-                </div>
+              <div class="contact-card">
+  <img src="assets/instagram-icon.svg" alt="إنستغرام" class="contact-icon">
+  <h3>إنستغرام</h3>
+  <p>تابعنا وتواصل معنا:</p>
+  <a href="https://www.instagram.com/olosoluations" target="_blank">@olosoluations</a>
+</div>
+
                 <div class="contact-card">
                     <span class="icon">✉️</span>
                     <h3>البريد الإلكتروني</h3>
